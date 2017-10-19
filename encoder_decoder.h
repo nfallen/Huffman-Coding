@@ -1,0 +1,5 @@
+class EncoderDecoder {
+
+public:
+    EncoderDecoder()
+}
