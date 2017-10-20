@@ -16,7 +16,7 @@ private:
 public:
     InnerNode(std::shared_ptr<FreqNode>, std::shared_ptr<FreqNode>);
     char find_next_char(const boost::dynamic_bitset<>&,
-                        int& bit_index) const final;
+                        size_t& bit_index) const final;
     void encode_node(boost::dynamic_bitset<>, 
                      std::unordered_map<char, boost::dynamic_bitset<>>&) const final;
 };

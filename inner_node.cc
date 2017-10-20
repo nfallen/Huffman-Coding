@@ -11,7 +11,7 @@ InnerNode::InnerNode(std::shared_ptr<FreqNode> l,
       rc{r} {}
 
 char InnerNode::find_next_char(const boost::dynamic_bitset<>& encoded_bits,
-                               int& bit_index) const {
+                               size_t& bit_index) const {
     if (encoded_bits[bit_index] == 0) {
         bit_index++;
         return lc->find_next_char(encoded_bits, bit_index);

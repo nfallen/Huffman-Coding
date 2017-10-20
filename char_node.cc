@@ -11,7 +11,7 @@ char CharNode::get_char() const {
 }
 
 char CharNode::find_next_char(const boost::dynamic_bitset<>& encoded_bits,
-                              int& bit_index) const {
+                              size_t& bit_index) const {
     return c;
 }
 

@@ -94,7 +94,7 @@ namespace encode_utils {
 	std::string decode_bits(const FreqNode& root,
 					 const boost::dynamic_bitset<>& encoded_bits) {
 		std::string decoding;
-		int bit_index(0);
+		size_t bit_index(0);
 		while (bit_index < encoded_bits.size()) {
 			decoding.push_back(root.find_next_char(encoded_bits, bit_index));
 		}

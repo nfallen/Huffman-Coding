@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package encode_utils;
+
+message FreqNodeProto {
+	enum NodeType {
+		CHARNODE = 0;
+		INNERNODE = 1;
+	}
+	string c = 2;
+	repeated bool bits = 3;
+	FreqNodeProto lc = 4;
+	FreqNodeProto rc = 5;
+}

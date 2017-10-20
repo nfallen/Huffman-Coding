@@ -14,7 +14,7 @@ public:
     CharNode(char c, int freq);
     char get_char() const;
     char find_next_char(const boost::dynamic_bitset<>&,
-                        int& bit_index) const final;
+                        size_t& bit_index) const final;
     void encode_node(boost::dynamic_bitset<>, 
                      std::unordered_map<char, boost::dynamic_bitset<>>&) const final;
 };
