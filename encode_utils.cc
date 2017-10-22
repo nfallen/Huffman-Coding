@@ -5,10 +5,12 @@
 #include <vector>
 #include <boost/dynamic_bitset.hpp>
 #include "char_node.h"
+#include "encoding.pb.h"
 #include "freq_node.h"
 #include "inner_node.h"
 
 namespace encode_utils {
+
 	class Comparator {
 	public:
 	    bool operator()(const std::shared_ptr<FreqNode>& a, 
@@ -81,23 +83,57 @@ namespace encode_utils {
 		}
 	}
 
-	boost::dynamic_bitset<> encode_string(const std::unordered_map<char, boost::dynamic_bitset<>>& encodings,
-					   const std::string& s) {
-		boost::dynamic_bitset<> bits;
+	Status encode_string(const std::unordered_map<char, boost::dynamic_bitset<>>& encodings,
+					   	 const std::string& s,
+					   	 boost::dynamic_bitset<>& bits) {
 		for (auto it = s.begin(); it != s.end(); ++it) {
 			std::unordered_map<char,boost::dynamic_bitset<>>::const_iterator res = encodings.find(*it);
+			if (res == encodings.end()) {
+				return Status::kInvalid;
+			}
 			concat_bitsets(bits, res->second);
 		}
-		return bits;
+		return Status::kOk;
 	}
 
-	std::string decode_bits(const FreqNode& root,
-					 const boost::dynamic_bitset<>& encoded_bits) {
-		std::string decoding;
+	Status from_proto(const encode_utils::FreqNodeProto& proto_node,
+	 			      std::shared_ptr<FreqNode>& node) {
+		if (proto_node.type() == encode_utils::FreqNodeProto_Type_CHAR) {
+			// TODO: convert to char
+			google::protobuf::int32 int_c = proto_node.c();
+			char c = static_cast<char>(int_c);
+			int freq = proto_node.freq();
+			node = std::shared_ptr<FreqNode>(new CharNode(c, freq));
+			return Status::kOk;
+		} else if (proto_node.type() == encode_utils::FreqNodeProto_Type_INNER) {
+			std::shared_ptr<FreqNode> lc;
+			std::shared_ptr<FreqNode> rc;
+			if (from_proto(proto_node.lc(), lc) == Status::kOk &&
+				from_proto(proto_node.rc(), rc) == Status::kOk) {
+				node = std::shared_ptr<FreqNode>(new InnerNode(lc, rc));
+				return Status::kOk;
+			} else {
+				return Status::kInvalid;
+			}
+		} else {
+			return Status::kInvalid;
+		}
+	}
+
+	Status decode_bits(const FreqNode& root,
+					   const boost::dynamic_bitset<>& encoded_bits,
+					   std::string& decoding) {
 		size_t bit_index(0);
 		while (bit_index < encoded_bits.size()) {
-			decoding.push_back(root.find_next_char(encoded_bits, bit_index));
+			char c;
+			if (root.find_next_char(encoded_bits, bit_index, c) == Status::kOk) {
+				decoding.push_back(c);
+			} else {
+				// An invalid status occurs if there are not enough bits 
+				// in the bitset to reach a char node.
+				return Status::kInvalid;
+			}
 		}
-		return decoding;
+		return Status::kOk;
 	}
 }

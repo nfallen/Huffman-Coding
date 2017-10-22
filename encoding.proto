@@ -3,12 +3,13 @@ syntax = "proto3";
 package encode_utils;
 
 message FreqNodeProto {
-	enum NodeType {
-		CHARNODE = 0;
-		INNERNODE = 1;
+	enum Type {
+		CHAR = 0;
+		INNER = 1;
 	}
-	string c = 2;
-	repeated bool bits = 3;
+	Type type = 1;
+	int32 c = 2;
+	int32 freq = 3;
 	FreqNodeProto lc = 4;
 	FreqNodeProto rc = 5;
 }

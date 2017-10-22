@@ -1,12 +1,27 @@
-#include "encode_utils.h"
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include "encode_utils.h"
+#include "encoding.pb.h"
+#include "status.h"
 
 int main() {
     std::string s = "helloworld";
     std::unordered_map<char, int> m = encode_utils::count_freq(s);
-    std::shared_ptr<FreqNode> root = encode_utils::create_optimal_hufftree(s);
+    std::shared_ptr<FreqNode> pre_root = encode_utils::create_optimal_hufftree(s);
+
+    encode_utils::FreqNodeProto proto_root;
+    pre_root->to_proto(&proto_root);
+
+	std::cout<<"Proto: \n"<<proto_root.DebugString()<<"\n";
+
+    std::shared_ptr<FreqNode> root;
+    Status status = encode_utils::from_proto(proto_root, root);
+    if (status == Status::kInvalid) {
+    	std::cout<<"Invalid Proto";
+    	return 1;
+    }
+
     std::unordered_map<char, boost::dynamic_bitset<>> encodings = encode_utils::encode_tree(*root);
 
 	std::cout<<"Encoding Size "<<encodings.size()<<"\n";
@@ -16,11 +31,23 @@ int main() {
 	}
 	std::cout<<"Root Freq"<<root->get_freq()<<"\n";
 
-	boost::dynamic_bitset<> encoding = encode_utils::encode_string(encodings, s);
-	std::cout<<"Encoding: "<<encoding<<"\n";
+	boost::dynamic_bitset<> encoding;
+	status = encode_utils::encode_string(encodings, s, encoding);
+	if (status == Status::kInvalid) {
+		std::cout<<"Char in String Not In Set of Encodable Chars\n";
+		return 1;
+	} else {
+		std::cout<<"Encoding: "<<encoding<<"\n";
+	}
 
-	std::string decoding = encode_utils::decode_bits(*root, encoding);
-	std::cout<<"Decoding: "<<decoding<<"\n";
+	std::string decoding;
+	status = encode_utils::decode_bits(*root, encoding, decoding);
+	if (status == Status::kInvalid) {
+		std::cout<<"Invalid Bits Cannot Be Decoded\n";
+		return 1;
+	} else {
+		std::cout<<"Decoding: "<<decoding<<"\n";
+	}
 
     return 0;
 }
