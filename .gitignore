@@ -41,3 +41,10 @@ cmake_install.cmake
 #Protocol Buffers
 *.pb.cc
 *.pb.h
+
+bin*
+
+googletest*
+
+gmock*
+gtest*
