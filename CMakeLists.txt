@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8.2)
 
 #Project name
 project(huffman)
+enable_testing()
 
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
