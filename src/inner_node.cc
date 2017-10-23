@@ -38,11 +38,11 @@ void InnerNode::encode_node(boost::dynamic_bitset<> bits,
     rc->encode_node(bits, encodings);
 }
 
-void InnerNode::to_proto(encode_utils::FreqNodeProto* proto_node) const {
-    proto_node->set_type(encode_utils::FreqNodeProto_Type_INNER);
+void InnerNode::to_proto(encode_decode::FreqNodeProto* proto_node) const {
+    proto_node->set_type(encode_decode::FreqNodeProto_Type_INNER);
     proto_node->set_freq(this->get_freq());
-    encode_utils::FreqNodeProto* proto_lc = proto_node->mutable_lc();
-    encode_utils::FreqNodeProto* proto_rc = proto_node->mutable_rc();
+    encode_decode::FreqNodeProto* proto_lc = proto_node->mutable_lc();
+    encode_decode::FreqNodeProto* proto_rc = proto_node->mutable_rc();
     lc->to_proto(proto_lc);
     rc->to_proto(proto_rc);
 }

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package encode_utils;
+package encode_decode;
 
 message FreqNodeProto {
 	enum Type {

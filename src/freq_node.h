@@ -22,7 +22,7 @@ public:
                                   char&) const = 0;
     virtual void encode_node(boost::dynamic_bitset<>, 
                              std::unordered_map<char, boost::dynamic_bitset<>>&) const = 0;
-    virtual void to_proto(encode_utils::FreqNodeProto* proto_node) const = 0;
+    virtual void to_proto(encode_decode::FreqNodeProto* proto_node) const = 0;
     virtual ~FreqNode();
 };
 

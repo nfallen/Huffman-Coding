@@ -1,5 +1,0 @@
-class EncoderDecoder {
-
-public:
-    EncoderDecoder()
-}

@@ -24,8 +24,8 @@ void CharNode::encode_node(boost::dynamic_bitset<> bits,
     encodings.emplace(c, bits);
 }
 
-void CharNode::to_proto(encode_utils::FreqNodeProto* proto_node) const {
-    proto_node->set_type(encode_utils::FreqNodeProto_Type_CHAR);
+void CharNode::to_proto(encode_decode::FreqNodeProto* proto_node) const {
+    proto_node->set_type(encode_decode::FreqNodeProto_Type_CHAR);
     proto_node->set_c(static_cast<google::protobuf::int32>(c));
     proto_node->set_freq(this->get_freq());
 }

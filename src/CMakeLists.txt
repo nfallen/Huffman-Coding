@@ -18,7 +18,7 @@ PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS encoding.proto)
 
 # Specifies the source code files needed to create the executable.
 # The header files needed will be automatically detected.
-add_executable(huffman huffman.cc encode_utils.cc freq_node.cc inner_node.cc char_node.cc ${PROTO_SRCS} ${PROTO_HDRS})
+add_executable(huffman huffman.cc encode_decode.cc freq_node.cc inner_node.cc char_node.cc ${PROTO_SRCS} ${PROTO_HDRS})
 
 # Link all libraries 
 target_link_libraries(huffman ${Boost_LIBRARIES})
